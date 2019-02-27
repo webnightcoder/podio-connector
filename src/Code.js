@@ -30,6 +30,8 @@ function getData(request) {
 /* istanbul ignore next */
 // eslint-disable-next-line no-unused-vars
 function getAuthType() {
+
+  console.log("Auth Type is  : " + getConnector().getAuthType() );
   return getConnector().getAuthType();
 }
 

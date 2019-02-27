@@ -69,8 +69,8 @@ ConnectorSvc.prototype = {
     },
     
     getOauthService : function(){
-        var builder = new Oauth2Builder(this.services.PropertiesService, this.services.OAuth2);
-        return new OauthSvc(builder, this.services.HtmlService);
+        var builder = new Oauth2Builder(this._services.PropertiesService, this._services.OAuth2);
+        return new OauthSvc(builder, this._services.HtmlService);
     },
 
     getData : function(request){
@@ -111,3 +111,5 @@ ConnectorSvc.prototype = {
         }
     }
 }
+
+module.exports = ConnectorSvc;

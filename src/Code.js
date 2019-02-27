@@ -1,10 +1,10 @@
 if (typeof(require) !== 'undefined') {
-  var connectorSvc   = require('./connectorSvc.js')['default'];
+  var ConnectorSvc   = require('./connectorSvc.js')['default'];
 }
 
 
 function getConnector(){
-  return new this.ConnectorSvc({
+  return new ConnectorSvc({
     CacheService: CacheService,
     UrlFetchApp: UrlFetchApp,
     HtmlService: HtmlService,

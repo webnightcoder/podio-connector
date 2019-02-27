@@ -2,16 +2,13 @@
 if (typeof(require) !== 'undefined') {
 var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js')['default'],
     OauthSvc            =   require('./services/OauthSvc.js')['default'],
-    CONF                =   require('./conf.js')['default'],
-    LOGGER              =   require('./services/logger.js')['default'];
+    CONF                =   require('./conf.js')['default'];
 }
 
 LOGGER.setLogger(CONF);
 
 function ConnectorSvc(services){
     this._services      =   services;
-
-    this._logger        =   LOGGER;
 }
 ConnectorSvc.prototype = {
     getSchema : function(){
@@ -76,15 +73,15 @@ ConnectorSvc.prototype = {
     },
     
     getOauthService : function(){
-        var builder = new OauthBuilderSvc(this._services.PropertiesService, this._services.OAuth2, CONF, this._logger);
-        return new OauthSvc(builder, this._services.HtmlService, CONF, this._logger);
+        var builder = new OauthBuilderSvc(this._services.PropertiesService, this._services.OAuth2, CONF);
+        return new OauthSvc(builder, this._services.HtmlService, CONF);
     },
 
     getData : function(request){
 
         var dataSchema = this.prepareSchema(request);
         var apiKey = this.getOauthService().getAccessToken();
-        this._logger.log('API KEY is : ' + apiKey);
+        
         // var spotifyClient = new SpotifyClient(this.services.CacheService, this.services.UrlFetchApp, apiKey);
 
         return this.buildTabularData(plays, dataSchema);

@@ -1,4 +1,4 @@
-function OauthBuilderSvc(propertiesSvc, oauth2Service, config, logger){
+function OauthBuilderSvc(propertiesSvc, oauth2Service, config){
     
     this._propertiesSvc     =   propertiesSvc;
 
@@ -9,8 +9,6 @@ function OauthBuilderSvc(propertiesSvc, oauth2Service, config, logger){
     this._clientId          =   this._config.PODIO.CLIENT_ID;
 
     this._clientSecret      =   this._config.PODIO.CLIENT_SECRET;
-
-    this._logger            =   logger;
 
 }
 

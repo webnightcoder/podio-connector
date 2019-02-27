@@ -1,4 +1,4 @@
-module.exports = {
+var eslit = {
     "env": {
       "browser": true,
       "es6": true,
@@ -33,3 +33,5 @@ module.exports = {
       "space-infix-ops": 2
     }
   };
+
+  module.exports = eslit;

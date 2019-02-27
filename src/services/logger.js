@@ -1,6 +1,6 @@
 
 if (typeof(require) !== 'undefined') {
-  var SYSTEM_INFO   =   require('systeminformation');
+  var SYSTEM_INFO   =   require('systeminformation')['default'];
 
 }
 

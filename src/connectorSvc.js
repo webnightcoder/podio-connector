@@ -1,12 +1,14 @@
 
 if (typeof(require) !== 'undefined') {
-var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js'),
-    OauthSvc            =   require('./services/OauthSvc.js'),
-    CONF                =   require('./conf.js');
+var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js')['default'],
+    OauthSvc            =   require('./services/OauthSvc.js')['default'],
+    CONF                =   require('./conf.js')['default'];
 }
 function ConnectorSvc(services){
 
     this._services      =   services;
+  
+  this.COI = services.sss;
 
 }
 ConnectorSvc.prototype = {
@@ -117,5 +119,5 @@ ConnectorSvc.prototype = {
 
 if (typeof(exports) !== 'undefined') {
   exports['__esModule'] = true;
-  exports['default'] = ConnectorSvc;;
+  exports['default'] = connectorSvc;;
 }

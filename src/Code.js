@@ -11,8 +11,6 @@ function getConnector(){
     PropertiesService: PropertiesService,
     OAuth2: OAuth2
   });
-
-  console.log("COnnected.");
 }
 
 function getConfig() {
@@ -24,12 +22,10 @@ function getSchema() {
 }
 
 function getData(request) {
-  console.log('REQUEST:', request);
   return getConnector().getData(request);
 }
 
 function getAuthType() {
-  console.log("Auth Type is : " + getConnector().getAuthType())
   return getConnector().getAuthType();
 }
 

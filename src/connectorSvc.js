@@ -2,8 +2,7 @@
 if (typeof(require) !== 'undefined') {
 var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js')['default'],
     OauthSvc            =   require('./services/OauthSvc.js')['default'],
-    CONF                =   require('./conf.js')['default'],
-    // PODIO_SVC           =   require('./services/podioSvc.js')['default'];
+    CONF                =   require('./conf.js')['default'];
 }
 
 LOGGER.setLogger(CONF);
@@ -82,7 +81,6 @@ ConnectorSvc.prototype = {
 
         var dataSchema = this.prepareSchema(request);
         var apiKey = this.getOauthService().getAccessToken();
-        
         // var podioSvc = new PODIO_SVC(this.services.CacheService, this.services.UrlFetchApp, apiKey);
 
         return this.buildTabularData(plays, dataSchema);

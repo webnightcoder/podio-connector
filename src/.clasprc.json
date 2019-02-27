@@ -7,7 +7,7 @@
         "expiry_date": 1551180636192
     },
     "oauth2ClientSettings": {
-        "clientId": "catalog-marc",
+        "clientId": "catalog-marc.podio.com",
         "clientSecret": "lvS4P81xbzNgdFrYvYumsrrPIp4UoDCnMRQU2LrmTVQ95VZvvmvgQcaALRzfsZrP",
         "redirectUri": "http://localhost"
     },

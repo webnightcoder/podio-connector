@@ -22,7 +22,7 @@ function getSchema() {
 }
 
 function getData(request) {
-  this.Logger.log("Request : " + request);
+  this.Logger.log("Request : " + JSON.stringify(request));
   return getConnector().getData(request);
 }
 

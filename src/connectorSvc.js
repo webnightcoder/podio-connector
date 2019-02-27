@@ -1,5 +1,6 @@
 var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js'),
-    OauthSvc            =   require('./services/OauthSvc.js');
+    OauthSvc            =   require('./services/OauthSvc.js'),
+    CONF                =   require('./conf.js');
 
 function ConnectorSvc(services){
 
@@ -45,7 +46,7 @@ ConnectorSvc.prototype = {
     },
 
     getAuthType : function(){
-        return {type : "OAUTH2"}
+        return { type : "OAUTH2" }
     },
 
     isAdminUser : function(){
@@ -69,8 +70,8 @@ ConnectorSvc.prototype = {
     },
     
     getOauthService : function(){
-        var builder = new Oauth2Builder(this._services.PropertiesService, this._services.OAuth2);
-        return new OauthSvc(builder, this._services.HtmlService);
+        var builder = new OauthBuilderSvc(this._services.PropertiesService, this._services.OAuth2, CONF);
+        return new OauthSvc(builder, this._services.HtmlService, CONF);
     },
 
     getData : function(request){

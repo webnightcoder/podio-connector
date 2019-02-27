@@ -15,7 +15,7 @@ OauthSvc.prototype = {
         var self = this;
         var authorized = this.getInternalService().handleCallback(request);
         var htmlContent = authorized ? 'Success! You can close this tab.' : 'Denied. You can close this tab';
-        return this.htmlService.createHtmlOutput(htmlContent);
+        return this._htmlSvc.createHtmlOutput(htmlContent);
     },
 
     isAuthValid : function(){
@@ -45,7 +45,7 @@ OauthSvc.prototype = {
     },
 
     getInternalService  : function(){
-        return this.oauth2Builder.build();
+        return this._OauthBuilder.build();
     }
 }
 

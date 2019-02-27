@@ -1,8 +1,8 @@
-function OauthBuilderSvc(propertiesSvc, OauthSvc, config){
+function OauthBuilderSvc(propertiesSvc, oauth2Service, config){
     
     this._propertiesSvc     =   propertiesSvc;
 
-    this._OauthSvc          =   OauthSvc;
+    this.oauth2Service      =   oauth2Service;
 
     this._config            =   config;
 
@@ -21,7 +21,7 @@ OauthBuilderSvc.prototype = {
             .setTokenUrl('https://podio.com/oauth/token')
             .setClientId(self._cliendId)
             .setClientSecret(self._clientSecret)
-            .setPropertyStore(this.propertiesService.getUserProperties())
+            .setPropertyStore(this._propertiesSvc.getUserProperties())
             .setScope('granted_scope_string')
             .setCallbackFunction('authCallback');
     }

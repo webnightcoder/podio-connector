@@ -1,4 +1,8 @@
 var connectorSvc   = require('./connectorSvc.js');
+var CONF           = require('./conf.js');
+var LOGGER         = require('./services/logger.js');
+
+LOGGER.setLogger(CONF);
 
 function getConnector(){
   return new connectorSvc({
@@ -23,7 +27,7 @@ function getSchema() {
 /* istanbul ignore next */
 // eslint-disable-next-line no-unused-vars
 function getData(request) {
-  console.log('REQUEST:', request);
+  LOGGER.log('REQUEST:', request);
   return getConnector().getData(request);
 }
 
@@ -31,7 +35,7 @@ function getData(request) {
 // eslint-disable-next-line no-unused-vars
 function getAuthType() {
 
-  console.log("Auth Type is  : " + getConnector().getAuthType() );
+  LOGGER.log("Auth Type is  : " + getConnector().getAuthType() );
   return getConnector().getAuthType();
 }
 
@@ -64,6 +68,7 @@ function resetAuth() {
 function get3PAuthorizationUrls() {
   return getConnector().get3PAuthorizationUrls();
 }
+
 
 
 module.exports = getConfig;

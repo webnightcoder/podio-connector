@@ -10,7 +10,9 @@ function getConnector(){
     HtmlService: HtmlService,
     PropertiesService: PropertiesService,
     OAuth2: OAuth2
-  })
+  });
+
+  console.log("COnnected.");
 }
 
 function getConfig() {
@@ -27,6 +29,7 @@ function getData(request) {
 }
 
 function getAuthType() {
+  console.log("Auth Type is : " + getConnector().getAuthType())
   return getConnector().getAuthType();
 }
 

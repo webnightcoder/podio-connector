@@ -2,6 +2,8 @@ var eslit = {
     "env": {
       "browser": true,
       "es6": true,
+      "node":true,
+      "amd": true,
       "jest/globals": true
     },
     "extends": "eslint:recommended",

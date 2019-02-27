@@ -45,7 +45,7 @@ OauthSvc.prototype = {
     },
 
     getInternalService  : function(){
-        return this.oauth2Builder.build();
+        return this._OauthBuilder.build();
     }
 }
 

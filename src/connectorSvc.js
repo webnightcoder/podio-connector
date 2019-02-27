@@ -2,14 +2,16 @@
 if (typeof(require) !== 'undefined') {
 var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js')['default'],
     OauthSvc            =   require('./services/OauthSvc.js')['default'],
-    CONF                =   require('./conf.js')['default'];
+    CONF                =   require('./conf.js')['default'],
+    LOGGER              =   require('./services/logger.js')['default'];
 }
+
+LOGGER.setLogger(CONF);
+
 function ConnectorSvc(services){
-
     this._services      =   services;
-  
-  this.COI = services.sss;
 
+    this._logger        =   LOGGER;
 }
 ConnectorSvc.prototype = {
     getSchema : function(){
@@ -74,21 +76,16 @@ ConnectorSvc.prototype = {
     },
     
     getOauthService : function(){
-        var builder = new OauthBuilderSvc(this._services.PropertiesService, this._services.OAuth2, CONF);
-        return new OauthSvc(builder, this._services.HtmlService, CONF);
+        var builder = new OauthBuilderSvc(this._services.PropertiesService, this._services.OAuth2, CONF, this._logger);
+        return new OauthSvc(builder, this._services.HtmlService, CONF, this._logger);
     },
 
     getData : function(request){
 
         var dataSchema = this.prepareSchema(request);
-
-        // var startDate = new Date(request.dateRange.startDate);
-        // var endDate = new Date(request.dateRange.endDate);
-        // endDate.setUTCHours(23, 59, 59, 999);
-        // var apiKey = this.getOauthService().getAccessToken();
+        var apiKey = this.getOauthService().getAccessToken();
+        this._logger.log('API KEY is : ' + apiKey);
         // var spotifyClient = new SpotifyClient(this.services.CacheService, this.services.UrlFetchApp, apiKey);
-
-        // var plays = spotifyClient.getRecentPlays(startDate, endDate);
 
         return this.buildTabularData(plays, dataSchema);
     },

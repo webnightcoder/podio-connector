@@ -22,10 +22,12 @@ function getSchema() {
 }
 
 function getData(request) {
+  this.Logger.log(request);
   return getConnector().getData(request);
 }
 
 function getAuthType() {
+  this.Logger.log( 'Auth TYpe is  '  + getConnector().getAuthType())
   return getConnector().getAuthType();
 }
 

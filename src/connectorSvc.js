@@ -5,7 +5,6 @@ var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js')['default'],
     CONF                =   require('./conf.js')['default'];
 }
 
-LOGGER.setLogger(CONF);
 
 function ConnectorSvc(services){
     this._services      =   services;
@@ -81,6 +80,7 @@ ConnectorSvc.prototype = {
 
         var dataSchema = this.prepareSchema(request);
         var apiKey = this.getOauthService().getAccessToken();
+        this.Logger.log("API_KEY is : " + apiKey);
         // var podioSvc = new PODIO_SVC(this.services.CacheService, this.services.UrlFetchApp, apiKey);
 
         return this.buildTabularData(plays, dataSchema);

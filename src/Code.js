@@ -1,4 +1,8 @@
-var connectorSvc   = require('./connectorSvc.js');
+if (typeof(require) !== 'undefined') {
+  console.log("Hey")
+  var connectorSvc   = require('./connectorSvc.js');
+}
+
 
 function getConnector(){
   return new connectorSvc({
@@ -31,32 +35,18 @@ function isAdminUser() {
   return getConnector().isAdminUser();
 }
 
-module.exports = isAdminUser;
-
 function authCallback(request) {
   return getConnector().authCallback(request);
 }
 
-module.exports = authCallback;
-
 function isAuthValid() {
   return getConnector().isAuthValid();
 }
-module.exports = isAuthValid;
 
 function resetAuth() {
   getConnector().resetAuth();
 }
-module.exports = resetAuth;
+
 function get3PAuthorizationUrls() {
   return getConnector().get3PAuthorizationUrls();
 }
-module.exports = get3PAuthorizationUrls;
-
-module.exports = getConfig;
-
-module.exports = getSchema;
-
-module.exports = getAuthType;
-
-module.exports = getData;

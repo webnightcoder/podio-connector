@@ -49,4 +49,7 @@ OauthSvc.prototype = {
     }
 }
 
-module.exports = OauthSvc;
+if (typeof(exports) !== 'undefined') {
+  exports['__esModule'] = true;
+  exports['default'] = OauthSvc;
+}

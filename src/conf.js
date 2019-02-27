@@ -10,5 +10,7 @@ var CONF = {
         TYPE: "google-connector" 
     }
 }
-
-module.exports = CONF;
+if (typeof(exports) !== 'undefined') {
+  exports['__esModule'] = true;
+  exports['default'] = CONF;
+}

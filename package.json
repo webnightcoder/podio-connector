@@ -12,7 +12,8 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/*.js"
+      "src/*.js",
+      "src/services/*.js"
     ]
   },
   "author": "",

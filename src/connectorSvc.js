@@ -1,7 +1,9 @@
+
+if (typeof(require) !== 'undefined') {
 var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js'),
     OauthSvc            =   require('./services/OauthSvc.js'),
     CONF                =   require('./conf.js');
-
+}
 function ConnectorSvc(services){
 
     this._services      =   services;
@@ -113,4 +115,7 @@ ConnectorSvc.prototype = {
     }
 }
 
-module.exports = ConnectorSvc;
+if (typeof(exports) !== 'undefined') {
+  exports['__esModule'] = true;
+  exports['default'] = ConnectorSvc;;
+}

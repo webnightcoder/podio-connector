@@ -1,5 +1,8 @@
-const SYSTEM_INFO   =   require('systeminformation');
 
+if (typeof(require) !== 'undefined') {
+  var SYSTEM_INFO   =   require('systeminformation');
+
+}
 
 function LOGGER(){
 
@@ -58,4 +61,8 @@ LOGGER.prototype = {
     }
 }
 
-module.exports = new LOGGER();
+
+if (typeof(exports) !== 'undefined') {
+  exports['__esModule'] = true;
+  exports['default'] = new LOGGER();
+}

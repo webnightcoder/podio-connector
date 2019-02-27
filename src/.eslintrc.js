@@ -36,4 +36,8 @@ var eslit = {
     }
   };
 
-  module.exports = eslit;
+
+if (typeof(exports) !== 'undefined') {
+  exports['__esModule'] = true;
+  exports['default'] = eslint;
+}

@@ -27,5 +27,7 @@ OauthBuilderSvc.prototype = {
     }
 
 }
-
-module.exports = OauthBuilderSvc;
+if (typeof(exports) !== 'undefined') {
+  exports['__esModule'] = true;
+  exports['default'] = OauthBuilderSvc;;
+}

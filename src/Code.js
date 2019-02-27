@@ -1,5 +1,4 @@
 if (typeof(require) !== 'undefined') {
-  console.log("Hey")
   var connectorSvc   = require('./connectorSvc.js');
 }
 
@@ -12,6 +11,7 @@ function getConnector(){
     PropertiesService: PropertiesService,
     OAuth2: OAuth2
   })
+  console.log(connectorSvc);
 }
 
 function getConfig() {

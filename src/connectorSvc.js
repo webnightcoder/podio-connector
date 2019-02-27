@@ -112,5 +112,5 @@ ConnectorSvc.prototype = {
 
 if (typeof(exports) !== 'undefined') {
   exports['__esModule'] = true;
-  exports['default'] = connectorSvc;;
+  exports['default'] = ConnectorSvc;;
 }

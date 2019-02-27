@@ -1,22 +1,15 @@
+var connectorSvc   = require('./connectorSvc.js');
 
-/* istanbul ignore next */
-if (typeof(require) !== 'undefined') {
-  var _connectorSvc = require('./connectorSvc.js');
-}
-
-/* istanbul ignore next */
-function getConnector() {
-  return new _connectorSvc({
+function getConnector(){
+  return new connectorSvc({
     CacheService: CacheService,
     UrlFetchApp: UrlFetchApp,
     HtmlService: HtmlService,
     PropertiesService: PropertiesService,
     OAuth2: OAuth2
-  });
+  })
 }
 
-/* istanbul ignore next */
-// eslint-disable-next-line no-unused-vars
 function getConfig() {
   return getConnector().getConfig();
 }
@@ -70,9 +63,5 @@ function get3PAuthorizationUrls() {
   return getConnector().get3PAuthorizationUrls();
 }
 
-/* global exports */
-/* istanbul ignore next */
-if (typeof(exports) !== 'undefined') {
-  exports['__esModule'] = true;
-  exports['getConfig'] = getConfig;
-}
+
+module.exports = getConfig;

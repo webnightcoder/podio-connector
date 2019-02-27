@@ -15,6 +15,7 @@ function getConnector(){
 }
 
 function getConfig() {
+  LOGGER.log("COnfig is  :" + getConnector().getConfig());
   return getConnector().getConfig();
 }
 

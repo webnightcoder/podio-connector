@@ -49,14 +49,17 @@ ConnectorSvc.prototype = {
           .setId('instructions')
           .setText('Enter npm package names to fetch their download count.');
       
-          
+
+        var optionBuilder = config.newOptionBuilder()
+            .setLabel('option label')
+            .setValue('Option value');
+
         var getOrgnozationNames = function(){
             var apiKey = this.getOauthService().getAccessToken();
             this.Logger.log("API_KEY is : " + apiKey);    
-            config.newOptionBuilder()
-                .setLabel("second option label")
-                .setValue("option_value_2");
+            return optionBuilder;
         }
+        
 
         config.newSelectSingle()
                 .setId('Org_name')

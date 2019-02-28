@@ -42,39 +42,33 @@ ConnectorSvc.prototype = {
     },
 
     getConfig : function(){
+        var apiKey = this.getOauthService().getAccessToken();
+        console.log(apiKey);
         var cc = DataStudioApp.createCommunityConnector();
         var config = cc.getConfig();
-      
-        config.newInfo()
-          .setId('instructions')
-          .setText('Enter npm package names to fetch their download count.');
-      
-
-        var optionBuilder = config.newOptionBuilder()
-            .setLabel('option label')
-            .setValue('Option value');
-
-        var getOrgnozationNames = function(){
-            var apiKey = this.getOauthService().getAccessToken();
-            this.Logger.log("API_KEY is : " + apiKey);    
-            return optionBuilder;
-        }
         
-
+        config.newInfo()
+        .setId('instructions')
+        .setText('Enter npm package names to fetch their download count.');
+        
+        var optionBuilder = config.newOptionBuilder()
+        .setLabel('option label')
+        .setValue('Option value');
+        
+        
         config.newSelectSingle()
-                .setId('Org_name')
-                .addOption(getOrgnozationNames);
-      
+        .setId('Org_name')
+        .addOption(optionBuilder);
+        
         config.newTextInput()
-            .setId('package')
-            .setName('Enter a single package name.')
-            .setHelpText('for example, googleapis or lighthouse')
-            .setPlaceholder('googleapis')
-            .setAllowOverride(true);
-      
-       config.setDateRangeRequired(true);
-      
-       return config.build();
+        .setId('package')
+        .setName('Enter a single package name.')
+        .setHelpText('for example, googleapis or lighthouse')
+        .setPlaceholder('googleapis')
+        .setAllowOverride(true);
+        
+        config.setDateRangeRequired(true);
+        return config.build();
     },
 
     getAuthType : function(){

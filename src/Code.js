@@ -27,7 +27,7 @@ function getData(request) {
 }
 
 function getAuthType() {
-  this.Logger.log( 'Auth TYpe is  '  + getConnector().getAuthType())
+  this.Logger.log( 'Auth TYpe is  '  + JSON.stringify(getConnector().getAuthType()))
   return getConnector().getAuthType();
 }
 

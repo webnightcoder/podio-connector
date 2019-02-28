@@ -42,9 +42,36 @@ ConnectorSvc.prototype = {
     },
 
     getConfig : function(){
-        return {
-            dateRangeRequired : true
+        var cc = DataStudioApp.createCommunityConnector();
+        var config = cc.getConfig();
+      
+        config.newInfo()
+          .setId('instructions')
+          .setText('Enter npm package names to fetch their download count.');
+      
+          
+        var getOrgnozationNames = function(){
+            var apiKey = this.getOauthService().getAccessToken();
+            this.Logger.log("API_KEY is : " + apiKey);    
+            config.newOptionBuilder()
+                .setLabel("second option label")
+                .setValue("option_value_2");
         }
+
+        config.newSelectSingle()
+                .setId('Org_name')
+                .addOption(getOrgnozationNames);
+      
+        config.newTextInput()
+            .setId('package')
+            .setName('Enter a single package name.')
+            .setHelpText('for example, googleapis or lighthouse')
+            .setPlaceholder('googleapis')
+            .setAllowOverride(true);
+      
+       config.setDateRangeRequired(true);
+      
+       return config.build();
     },
 
     getAuthType : function(){

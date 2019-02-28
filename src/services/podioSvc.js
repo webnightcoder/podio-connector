@@ -10,5 +10,15 @@ function PodioSvc(cacheSvc, UrlFetchApp, apiKey){
 
 PodioSvc.prototype = {
 
+    getOrgnizations : function(){
+        var headers = {
+            Authorization : "Bearer " + this._API_KEY
+        }
+        var url = 'https.api.podio.com/org/';
+        console.log("Fetching Orgnization Details.");
+        var result = this._UrlFetchApp.fetch(url, {headers : headers});
+        console.log('Result :' + JSON.stringify(result));
+        return result;
+    }
 
 }

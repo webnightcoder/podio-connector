@@ -2,7 +2,8 @@
 if (typeof(require) !== 'undefined') {
 var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js')['default'],
     OauthSvc            =   require('./services/OauthSvc.js')['default'],
-    CONF                =   require('./conf.js')['default'];
+    CONF                =   require('./conf.js')['default'],
+    PODIO_SVC           =   require('./services/podioSvc.js')['default'];
 }
 
 
@@ -42,8 +43,10 @@ ConnectorSvc.prototype = {
     },
 
     getConfig : function(){
-        var apiKey = this.getOauthService().getAccessToken();
-        console.log(apiKey);
+        var apiKey      = this.getOauthService().getAccessToken();
+        var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey); 
+        var orgData     = podioSvc.getOrgnizations();
+        
         var cc = DataStudioApp.createCommunityConnector();
         var config = cc.getConfig();
         

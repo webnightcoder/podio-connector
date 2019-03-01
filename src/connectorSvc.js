@@ -1,39 +1,39 @@
-
-if (typeof(require) !== 'undefined') {
-var OauthBuilderSvc     =   require('./services/OauthBuilderSvc.js')['default'],
-    OauthSvc            =   require('./services/OauthSvc.js')['default'],
-    CONF                =   require('./conf.js')['default'],
-    PODIO_SVC           =   require('./services/podioSvc.js')['default'];
+if (typeof (require) !== 'undefined') {
+    var OauthBuilderSvc     = require('./services/OauthBuilderSvc.js')['default'],
+        OauthSvc            = require('./services/OauthSvc.js')['default'],
+        CONF                = require('./conf.js')['default'],
+        DataBuilderSvc      = require('./dataBuilder.js'),
+        PODIO_SVC           = require('./services/podioSvc.js')['default'];
 }
 
 
-function ConnectorSvc(services){
-    this._services      =   services;
+function ConnectorSvc(services) {
+    this._services = services;
 }
 ConnectorSvc.prototype = {
-    getSchema : function(){
+    getSchema: function () {
         return {
-            schema : [
+            schema: [
                 {
-                    name : 'orgnization_id',
-                    label : "Orgnization Id",
-                    dataType : "STRING",
+                    name: 'org_id',
+                    label: "org Id",
+                    dataType: "NUMBER",
                     semantics: {
                         conceptType: 'DIMENSION'
                     }
                 },
                 {
-                    name : 'space_id',
-                    label : "Space Id",
-                    dataType : "STRING",
+                    name: 'org_name',
+                    label: "name of orgnization",
+                    dataType: "STRING",
                     semantics: {
                         conceptType: 'DIMENSION'
                     }
                 },
                 {
-                    name : 'app_id',
-                    label : "App Id",
-                    dataType : "STRING",
+                    name: 'spaces',
+                    label: "Number Of Spaces into orgnization",
+                    dataType: "NUMBER",
                     semantics: {
                         conceptType: 'DIMENSION'
                     }
@@ -42,102 +42,126 @@ ConnectorSvc.prototype = {
         }
     },
 
-    getConfig : function(){
-        var apiKey      = this.getOauthService().getAccessToken();
-        var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey); 
-        var orgData     = podioSvc.getOrgnizations();
-        
+    getConfig: function () {
+        // var apiKey = this.getOauthService().getAccessToken();
+        // var podioSvc = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
+        // var orgData = podioSvc.getOrgnizations();
+
         var cc = DataStudioApp.createCommunityConnector();
         var config = cc.getConfig();
         
-        config.newInfo()
-        .setId('instructions')
-        .setText('Enter npm package names to fetch their download count.');
+        config
+            .newTextInput()
+            .setId('org_id')
+            .setName('org_id')
+            .setHelpText('Enter the Id of Orgnization')
+            .setAllowOverride(true)
+            .setPlaceholder('Enter the Id of Orgnization')
+
+        config
+            .newTextInput()
+            .setId('space_id')
+            .setName('space_id')
+            .setHelpText('Enter the id of space')
+            .setAllowOverride(true)
+            .setPlaceholder('Enter the id of space')
         
-        var optionBuilder = config.newOptionBuilder()
-        .setLabel('option label')
-        .setValue('Option value');
-        
-        
-        config.newSelectSingle()
-        .setId('Org_name')
-        .addOption(optionBuilder);
-        
-        config.newTextInput()
-        .setId('package')
-        .setName('Enter a single package name.')
-        .setHelpText('for example, googleapis or lighthouse')
-        .setPlaceholder('googleapis')
-        .setAllowOverride(true);
+        config
+            .newTextInput()
+            .setId('app_id')
+            .setName('app_id')
+            .setHelpText('Enter the id of app')
+            .setAllowOverride(true)
+            .setPlaceholder('Enter the id of app')
+            
+        // var temp = config.newSelectSingle()
+        // .setId('Org_name')
+        // .setAllowOverride(false)
+
+        // for(var i =0; i < orgData.length ; i++){
+        //     temp.addOption(config.newOptionBuilder()
+        //     .setLabel(orgData[i].org_name)
+        //     .setValue(orgData[i].org_id))
+        // } //  append the dynamic name from org details
         
         config.setDateRangeRequired(true);
         return config.build();
     },
 
-    getAuthType : function(){
-        return { type : "OAUTH2" }
+    getAuthType: function () {
+        return {
+            type: "OAUTH2"
+        }
     },
 
-    isAdminUser : function(){
+    isAdminUser: function () {
         return true;
     },
 
-    authCallback : function(request){
+    authCallback: function (request) {
         return this.getOauthService().authCallback(request);
     },
 
-    isAuthValid : function(request){
+    isAuthValid: function (request) {
         return this.getOauthService().isAuthValid()
     },
 
-    get3PAuthorizationUrls : function(){
+    get3PAuthorizationUrls: function () {
         return this.getOauthService().get3PAuthorizationUrls();
     },
 
-    resetAuth : function(){
+    resetAuth: function () {
         this.getOauthService().resetAuth();
     },
-    
-    getOauthService : function(){
+
+    getOauthService: function () {
         var builder = new OauthBuilderSvc(this._services.PropertiesService, this._services.OAuth2, CONF);
         return new OauthSvc(builder, this._services.HtmlService, CONF);
     },
 
-    getData : function(request){
+    getData: function (request) {
 
         var dataSchema = this.prepareSchema(request);
-        var apiKey = this.getOauthService().getAccessToken();
-        this.Logger.log("API_KEY is : " + apiKey);
-        // var podioSvc = new PODIO_SVC(this.services.CacheService, this.services.UrlFetchApp, apiKey);
+        console.log('dataSchema is : ' + JSON.stringify(dataSchema));
 
-        return this.buildTabularData(plays, dataSchema);
+        var apiKey = this.getOauthService().getAccessToken();
+        var podioSvc = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
+        var orgData = podioSvc.getOrgnizations();
+        
+        return this.buildTabularData(orgData, dataSchema);
     },
-    
-    prepareSchema : function(){
+
+    prepareSchema: function (request) {
         var dataSchema = [];
         var fixedSchema = this.getSchema().schema;
-        request.fields.forEach(function(field) {
+        request.fields.forEach(function (field) {
             for (var i = 0; i < fixedSchema.length; i++) {
-            if (fixedSchema[i].name == field.name) {
-                dataSchema.push(fixedSchema[i]);
-                break;
-            }
+                if (fixedSchema[i].name == field.name) {
+                    dataSchema.push(fixedSchema[i]);
+                    break;
+                }
             }
         });
 
         return dataSchema;
     },
-    
-    buildTabularData  : function(){
-        // var dataBuilder = new Data
+
+    buildTabularData: function (orgData, dataSchema) {
+        var dataBuilder = new DataBuilderSvc(dataSchema);
+        var data        = [];
+        orgData.forEach(function(org){
+            data.push({
+                values : dataBuilder.build(org)
+            })
+        })
         return {
             schema: dataSchema,
-            rows: [{},{}]
+            rows: [data]
         }
     }
 }
 
-if (typeof(exports) !== 'undefined') {
-  exports['__esModule'] = true;
-  exports['default'] = ConnectorSvc;;
+if (typeof (exports) !== 'undefined') {
+    exports['__esModule'] = true;
+    exports['default'] = ConnectorSvc;;
 }

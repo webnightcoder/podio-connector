@@ -21,13 +21,14 @@ function getSchema() {
   return getConnector().getSchema();
 }
 
+
 function getData(request) {
-  this.Logger.log("Request : " + JSON.stringify(request));
+  console.log("Request : " + JSON.stringify(request));
   return getConnector().getData(request);
 }
 
 function getAuthType() {
-  this.Logger.log( 'Auth TYpe is  '  + JSON.stringify(getConnector().getAuthType()))
+  console.log( 'Auth TYpe is  '  + JSON.stringify(getConnector().getAuthType()))
   return getConnector().getAuthType();
 }
 

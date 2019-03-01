@@ -15,10 +15,10 @@ DataBuilderSvc.prototype = {
             values.push(orgData.org_id);
             break;
             case 'org_name':
-            values.push(orgData.name);
+            values.push(orgData.org_name);
             break;
             case 'spaces':
-            values.push(orgData.spaces.length);
+            values.push(orgData.space_length);
             break;
             default:
             console.log('Unknown field:', field.name);

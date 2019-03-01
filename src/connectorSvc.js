@@ -19,7 +19,7 @@ ConnectorSvc.prototype = {
                     label: "org Id",
                     dataType: "NUMBER",
                     semantics: {
-                        conceptType: 'DIMENSION'
+                        conceptType: 'METRIC'
                     }
                 },
                 {
@@ -35,7 +35,7 @@ ConnectorSvc.prototype = {
                     label: "Number Of Spaces into orgnization",
                     dataType: "NUMBER",
                     semantics: {
-                        conceptType: 'DIMENSION'
+                        conceptType: 'METRIC'
                     }
                 }
             ]
@@ -154,6 +154,7 @@ ConnectorSvc.prototype = {
                 values : dataBuilder.build(org)
             })
         })
+        console.log("Data builder Data are : " + JSON.stringify(data))
         return {
             schema: dataSchema,
             rows: [data]

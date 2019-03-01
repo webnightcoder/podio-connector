@@ -23,6 +23,7 @@ PODIO_SVC.prototype = {
             var tempObj = {};
             tempObj.org_name = context[i].name;
             tempObj.org_id   = context[i].org_id;
+            tempObj.space_length = context[i].spaces.length;
             orgObj.push(tempObj);
         }
         console.log('Org Details are  :' + JSON.stringify(orgObj) );

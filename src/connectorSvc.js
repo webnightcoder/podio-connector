@@ -120,7 +120,7 @@ ConnectorSvc.prototype = {
     },
 
     getData: function (request) {
-        console.log('getData called').
+        console.log('getData called')
         var appId       = request.configParams.app_id;
         var apiKey      = this.getOauthService().getAccessToken();
         var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);

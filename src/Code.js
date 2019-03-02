@@ -13,7 +13,8 @@ function getConnector(){
   });
 }
 
-function getConfig() {
+function getConfig(request) {
+  console.log("Request on get COnfig : " + JSON.stringify(request));
   return getConnector().getConfig();
 }
 

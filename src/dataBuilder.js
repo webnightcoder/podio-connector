@@ -6,24 +6,15 @@ function DataBuilderSvc(dataSchema){
 
 DataBuilderSvc.prototype = {
 
-    build : function(orgData){
+    build : function(itemData){
         var values = [];
-        console.log('Org data for Build are : ' + JSON.stringify(orgData));
-        console.log('dataSchema : ' +JSON.stringify(this._dataSchema));
+        
         this._dataSchema.forEach(function(field) {
-            switch (field.name) {
-            case 'org_id':
-            values.push(orgData.org_id);
-            break;
-            case 'org_name':
-            values.push(orgData.org_name);
-            break;
-            case 'spaces':
-            values.push(orgData.space_length);
-            break;
-            default:
-            console.log('Unknown field:', field.name);
-            values.push('');
+            for(i = 0; i < itemData.length; i++){
+                var key = Object.keys(itemData[i])[i];
+                if(field.name == Object.keys(itemData[i])[i]){
+                    values.push(itemData[i][key]);
+                }
             }
         });
         console.log('Values are : ' + JSON.stringify(values));

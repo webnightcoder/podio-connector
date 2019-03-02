@@ -120,15 +120,19 @@ ConnectorSvc.prototype = {
     },
 
     getData: function (request) {
-
-        var dataSchema = this.prepareSchema(request);
-        console.log('dataSchema is : ' + JSON.stringify(dataSchema));
-
-        var apiKey = this.getOauthService().getAccessToken();
-        var podioSvc = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
-        var orgData = podioSvc.getOrgnizations();
+        console.log('getData called').
+        var appId       = request.configParams.app_id;
+        var apiKey      = this.getOauthService().getAccessToken();
+        var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
+        var orgData     = podioSvc.getOrgnizations();
+        var appfieldsSchema   = podioSvc.getFieldsName(appId, apiKey);
         
-        return this.buildTabularData(orgData, dataSchema);
+        console.log("appFieldSchema is : " + JSON.stringify(appfieldsSchema));
+        // var dataSchema = this.prepareSchema(request);
+
+        itemData = podioSvc.getItems(appId, apiKey);
+
+        return this.buildTabularData(itemData, appfieldsSchema);
     },
 
     prepareSchema: function (request) {
@@ -146,12 +150,12 @@ ConnectorSvc.prototype = {
         return dataSchema;
     },
 
-    buildTabularData: function (orgData, dataSchema) {
+    buildTabularData: function (itemData, dataSchema) {
         var dataBuilder = new DataBuilderSvc(dataSchema);
         var data        = [];
-        orgData.forEach(function(org){
+        itemData.forEach(function(item){
             data.push({
-                values : dataBuilder.build(org)
+                values : dataBuilder.build(item)
             })
         })
         console.log("buildTabularData : " + JSON.stringify({

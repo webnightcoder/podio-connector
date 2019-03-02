@@ -1,7 +1,7 @@
 var CONF = {
     PODIO : {
-        CLIENT_ID : 'podio-connector-a0jt5l',
-        CLIENT_SECRET : 'gRv6UrGjGwwDeed6lHlR9yejrWEPlUipBAIAqoz0Hjub08t0NjZwAmg87xVGvuCR'
+        CLIENT_ID : 'podio-connector-rsc6pi',
+        CLIENT_SECRET : 'OtgEIBAKqUNXMBn8hBSNyun0jDdPgIG11UDsDSMbpIja9kpkMym5trvq9pAtZOP0'
     },
     LOGZ_IO : {
         USE: true,

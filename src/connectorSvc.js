@@ -17,9 +17,9 @@ ConnectorSvc.prototype = {
                 {
                     name: 'org_id',
                     label: "org Id",
-                    dataType: "NUMBER",
+                    dataType: "STRING",
                     semantics: {
-                        conceptType: 'METRIC'
+                        conceptType: 'DIMENSION'
                     }
                 },
                 {

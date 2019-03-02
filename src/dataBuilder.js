@@ -9,6 +9,7 @@ DataBuilderSvc.prototype = {
     build : function(orgData){
         var values = [];
         console.log('Org data for Build are : ' + JSON.stringify(orgData));
+        console.log('dataSchema : ' +JSON.stringify(this._dataSchema));
         this._dataSchema.forEach(function(field) {
             switch (field.name) {
             case 'org_id':

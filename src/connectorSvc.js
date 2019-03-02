@@ -154,10 +154,13 @@ ConnectorSvc.prototype = {
                 values : dataBuilder.build(org)
             })
         })
-        console.log("Data builder Data are : " + JSON.stringify(data))
+        console.log("buildTabularData : " + JSON.stringify({
+            schema: dataSchema,
+            rows: data
+        }))
         return {
             schema: dataSchema,
-            rows: [data]
+            rows: data
         }
     }
 }

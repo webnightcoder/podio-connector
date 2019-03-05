@@ -11,36 +11,18 @@ function ConnectorSvc(services) {
     this._services = services;
 }
 ConnectorSvc.prototype = {
-    getSchema: function () {
-        return {
-            schema: [
-                {
-                    name: 'org_id',
-                    label: "org Id",
-                    dataType: "STRING",
-                    semantics: {
-                        conceptType: 'DIMENSION'
-                    }
-                },
-                {
-                    name: 'org_name',
-                    label: "name of orgnization",
-                    dataType: "STRING",
-                    semantics: {
-                        conceptType: 'DIMENSION'
-                    }
-                },
-                {
-                    name: 'spaces',
-                    label: "Number Of Spaces into orgnization",
-                    dataType: "NUMBER",
-                    semantics: {
-                        conceptType: 'METRIC'
-                    }
-                }
-            ]
-        }
+    getSchema: function (request) {
+        return this.getDynamicSchema(request.configParams.app_id);
     },
+
+    getDynamicSchema : function(appId){
+        var apiKey      = this.getOauthService().getAccessToken();
+        var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
+        var appfieldsSchema   = podioSvc.getFieldsName(appId, apiKey);
+        console.log("Schema is : " + JSON.stringify(appfieldsSchema));
+        return appfieldsSchema;
+    },
+    
 
     getConfig: function () {
         // var apiKey = this.getOauthService().getAccessToken();
@@ -120,30 +102,23 @@ ConnectorSvc.prototype = {
     },
 
     getData: function (request) {
-        console.log('getData called')
         var appId       = request.configParams.app_id;
         var apiKey      = this.getOauthService().getAccessToken();
         var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
-        var orgData     = podioSvc.getOrgnizations();
-        var appfieldsSchema   = podioSvc.getFieldsName(appId, apiKey);
-        
-        console.log("appFieldSchema is : " + JSON.stringify(appfieldsSchema));
-        // var dataSchema = this.prepareSchema(request);
-
         itemData = podioSvc.getItems(appId, apiKey);
-
-        return this.buildTabularData(itemData, appfieldsSchema);
+        var dataSchema = this.prepareSchema(request)
+        return this.buildTabularData(itemData, dataSchema);
     },
 
     prepareSchema: function (request) {
         var dataSchema = [];
-        var fixedSchema = this.getSchema().schema;
-        request.fields.forEach(function (field) {
+        var fixedSchema = this.getSchema(request).schema;
+        request.fields.forEach(function(field) {
             for (var i = 0; i < fixedSchema.length; i++) {
-                if (fixedSchema[i].name == field.name) {
-                    dataSchema.push(fixedSchema[i]);
-                    break;
-                }
+            if (fixedSchema[i].name == field.name) {
+                dataSchema.push(fixedSchema[i]);
+                break;
+            }
             }
         });
 

@@ -1,23 +1,28 @@
 function DataBuilderSvc(dataSchema){
 
     this._dataSchema = dataSchema;
-
+    
 }
 
 DataBuilderSvc.prototype = {
 
     build : function(itemData){
         var values = [];
-        
+
         this._dataSchema.forEach(function(field) {
-            for(i = 0; i < itemData.length; i++){
-                var key = Object.keys(itemData[i])[i];
-                if(field.name == Object.keys(itemData[i])[i]){
-                    values.push(itemData[i][key]);
+            var stat = false;
+            for(data in itemData){
+                if(field.name == data){
+                    values.push(itemData[data]);
+                    stat = true;
+                    break;
                 }
             }
+            if(!stat){
+                values.push('');
+            }
         });
-        console.log('Values are : ' + JSON.stringify(values));
+        // console.log('Values are : ' + JSON.stringify(values));
         return values;
     }
 

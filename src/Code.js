@@ -18,8 +18,8 @@ function getConfig(request) {
   return getConnector().getConfig();
 }
 
-function getSchema() {
-  return getConnector().getSchema();
+function getSchema(request) {
+  return getConnector().getSchema(request);
 }
 
 

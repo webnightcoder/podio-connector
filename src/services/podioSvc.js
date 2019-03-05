@@ -42,68 +42,79 @@ PODIO_SVC.prototype = {
         configSchema.schema.push({
             name  : 'item_id',
             label : 'Item Id',
-            dataType : "STRING",
+            dataType : "NUMBER",
             semantics: {
-                conceptType: 'DIMENSION'
+                conceptType: 'METRIC'
             }
         })
         for(var i =0; i < fields.length; i++){
             if(fields[i].type == 'app' || fields[i].type == 'text'){
-
-                configSchema.schema.push({
-                    name  : fields[i].external_id,
-                    label : fields[i].label,
-                    dataType : "STRING",
-                    semantics: {
-                        conceptType: 'DIMENSION'
-                    }
-                })
+                if(fields[i].status == 'active'){
+                    configSchema.schema.push({
+                        name  : fields[i].external_id,
+                        label : fields[i].external_id,
+                        dataType : "STRING",
+                        semantics: {
+                            conceptType: 'METRIC'
+                        }
+                    })
+                }
             }else if(fields[i].type == 'date'){
-                configSchema.schema.push({
-                    name  : fields[i].external_id,
-                    label : fields[i].label,
-                    dataType : "STRING",
-                    semantics: {
-                        conceptType: 'DIMENSION',
-                        semanticGroup: 'DATETIME'
-                    }
-                })
+                if(fields[i].status == 'active'){
+                    configSchema.schema.push({
+                        name  : fields[i].external_id,
+                        label : fields[i].external_id,
+                        dataType : "STRING",
+                        semantics: {
+                            conceptType: 'METRIC',
+                            semanticGroup: 'DATETIME'
+                        }
+                    })
+                }
             }else if(fields[i].type == 'calculation'){
-                configSchema.schema.push({
-                    name  : fields[i].external_id,
-                    label : fields[i].label,
-                    dataType : "NUMBER",
-                    semantics: {
-                        conceptType: 'METRIC',
-                    }
-                })
+                if(fields[i].status == "active"){
+                    configSchema.schema.push({
+                        name  : fields[i].external_id,
+                        label : fields[i].external_id,
+                        dataType : "NUMBER",
+                        semantics: {
+                            conceptType: 'DIMENSION',
+                        }
+                    })
+                }
             }else if(fields[i].type == "number"){
-                configSchema.schema.push({
-                    name  : fields[i].external_id,
-                    label : fields[i].label,
-                    dataType : "NUMBER",
-                    semantics: {
-                        conceptType: 'METRIC',
-                    }
-                })
+                if(fields[i].status == 'active'){
+                    configSchema.schema.push({
+                        name  : fields[i].external_id,
+                        label : fields[i].external_id,
+                        dataType : "NUMBER",
+                        semantics: {
+                            conceptType: 'DIMENSION',
+                        }
+                    })
+                }
             }else if(fields[i].type == 'location'){
-                configSchema.schema.push({
-                    name  : fields[i].external_id,
-                    label : fields[i].label,
-                    dataType : "STRING",
-                    semantics: {
-                        conceptType: 'DIMENSION'
-                    }
-                })
+                if(fields[i].status == 'active'){
+                    configSchema.schema.push({
+                        name  : fields[i].external_id,
+                        label : fields[i].external_id,
+                        dataType : "STRING",
+                        semantics: {
+                            conceptType: 'METRIC'
+                        }
+                    })
+                }
             }else if(fields.type == 'catagory'){
-                configSchema.schema.push({
-                    name  : fields[i].external_id,
-                    label : fields[i].label,
-                    dataType : "STRING",
-                    semantics: {
-                        conceptType: 'DIMENSION'
-                    }
-                })
+                if(fields[i].status == 'active'){
+                    configSchema.schema.push({
+                        name  : fields[i].external_id,
+                        label : fields[i].external_id,
+                        dataType : "STRING",
+                        semantics: {
+                            conceptType: 'METRIC'
+                        }
+                    })
+                }
             }
         }
         return configSchema;
@@ -122,30 +133,35 @@ PODIO_SVC.prototype = {
         for(var i =0 ; i < items.length; i++){
             var item_id = items[i].item_id;
             var fields = items[i].fields;
-            itemData.push({item_id : item_id});
+            var tempObj = {};
+            tempObj['item_id'] = item_id;
             for(var j =0; j < fields.length; j++){
                 var external_id = fields[j].external_id;
+                
                 if(fields[j].type == 'app'){
                     
-                    itemData.push({  [external_id] : fields[j].values[0].value.title })
+                     tempObj[external_id]  = fields[j].values[0].value.title;
 
                 }else if(fields[j].type == 'date'){
 
-                    itemData.push({ [external_id]: fields[j].values[0].start })
+                    tempObj[external_id]  = fields[j].values[0].start_date
 
                 }else if(fields[j].type == 'calculation'){
-                    itemData.push({ [external_id]: fields[j].values[0].value })
+                    tempObj[external_id]  = fields[j].values[0].value;
 
                 }else if(fields[j].type == "number"){
-                    itemData.push({ [external_id]: fields[j].values[0].value })
+                    tempObj[external_id]  = parseInt(fields[j].values[0].value);
 
                 }else if(fields[j].type == 'location'){
-                    itemData.push({ [external_id]: fields[j].values[0].value })
+                    tempObj[external_id]  = fields[j].values[0].value;
 
                 }else if(fields[j].type == 'catagory'){
-                    itemData.push({ [external_id]: fields[j].values[0].value })
+                    tempObj[external_id]  = fields[j].values[0].value;
                 }
             }
+            itemData.push(tempObj);
+            tempObj = {};
+            
         }
         return itemData;}catch(error){
             console.log(JSON.stringify(error));

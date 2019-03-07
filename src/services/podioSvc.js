@@ -55,7 +55,7 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
-                            conceptType: 'METRIC'
+                            conceptType: 'DIMENSION'
                         }
                     })
                 }
@@ -66,7 +66,7 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
-                            conceptType: 'METRIC',
+                            conceptType: 'DIMENSION',
                             semanticGroup: 'DATETIME'
                         }
                     })
@@ -78,7 +78,7 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "NUMBER",
                         semantics: {
-                            conceptType: 'DIMENSION',
+                            conceptType: 'METRIC',
                         }
                     })
                 }
@@ -89,7 +89,7 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "NUMBER",
                         semantics: {
-                            conceptType: 'DIMENSION',
+                            conceptType: 'METRIC',
                         }
                     })
                 }
@@ -100,7 +100,7 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
-                            conceptType: 'METRIC'
+                            conceptType: 'DIMENSION'
                         }
                     })
                 }
@@ -111,7 +111,7 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
-                            conceptType: 'METRIC'
+                            conceptType: 'DIMENSION'
                         }
                     })
                 }

@@ -66,7 +66,7 @@ ConnectorSvc.prototype = {
         //     .setValue(orgData[i].org_id))
         // } //  append the dynamic name from org details
         
-        config.setDateRangeRequired(true);
+        config.setDateRangeRequired(false);
         return config.build();
     },
 
@@ -106,6 +106,7 @@ ConnectorSvc.prototype = {
         var apiKey      = this.getOauthService().getAccessToken();
         var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
         itemData = podioSvc.getItems(appId, apiKey);
+        console.log("Item Data : " + JSON.stringify(itemData));
         var dataSchema = this.prepareSchema(request)
         return this.buildTabularData(itemData, dataSchema);
     },
@@ -115,10 +116,9 @@ ConnectorSvc.prototype = {
         var fixedSchema = this.getSchema(request).schema;
         request.fields.forEach(function(field) {
             for (var i = 0; i < fixedSchema.length; i++) {
-            if (fixedSchema[i].name == field.name) {
-                dataSchema.push(fixedSchema[i]);
-                break;
-            }
+                if (fixedSchema[i].name == field.name) {
+                    dataSchema.push(fixedSchema[i]);
+                }
             }
         });
 
@@ -132,11 +132,8 @@ ConnectorSvc.prototype = {
             data.push({
                 values : dataBuilder.build(item)
             })
-        })
-        console.log("buildTabularData : " + JSON.stringify({
-            schema: dataSchema,
-            rows: data
-        }))
+        });
+        
         return {
             schema: dataSchema,
             rows: data

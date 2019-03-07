@@ -14,7 +14,6 @@ function getConnector(){
 }
 
 function getConfig(request) {
-  console.log("Request on get COnfig : " + JSON.stringify(request));
   return getConnector().getConfig();
 }
 
@@ -24,12 +23,10 @@ function getSchema(request) {
 
 
 function getData(request) {
-  console.log("Request : " + JSON.stringify(request));
   return getConnector().getData(request);
 }
 
 function getAuthType() {
-  console.log( 'Auth TYpe is  '  + JSON.stringify(getConnector().getAuthType()))
   return getConnector().getAuthType();
 }
 

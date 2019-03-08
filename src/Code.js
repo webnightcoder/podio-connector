@@ -23,6 +23,7 @@ function getSchema(request) {
 
 
 function getData(request) {
+  console.log("GET Data : " + JSON.stringify(request));
   return getConnector().getData(request);
 }
 

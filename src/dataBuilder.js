@@ -22,7 +22,6 @@ DataBuilderSvc.prototype = {
                 values.push('');
             }
         });
-        console.log('Values are : ' + JSON.stringify(values));
         return values;
     }
 

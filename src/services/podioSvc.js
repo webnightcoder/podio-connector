@@ -66,8 +66,8 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
-                            conceptType: 'DIMENSION',
-                            semanticGroup: 'DATETIME'
+                            'conceptType': 'METRIC',
+                            'semanticGroup': 'DATE_OR_TIME'
                         }
                     })
                 }
@@ -121,7 +121,7 @@ PODIO_SVC.prototype = {
     },
 
     getItems : function(appId, apiKey){
-        try{var headers = {
+        var headers = {
             Authorization : "Bearer " + apiKey,
                 limit : 500
         }
@@ -138,15 +138,19 @@ PODIO_SVC.prototype = {
             for(var j =0; j < fields.length; j++){
                 var external_id = fields[j].external_id;
                 
-                if(fields[j].type == 'app'){
+                if(fields[j].type == 'text'){
+                    tempObj[external_id] = fields[j].values[0].value;
+                }else if(fields[j].type == 'app'){
                     
-                     tempObj[external_id]  = fields[j].values[0].value.title;
+                     tempObj[external_id]  = fields[j].values[0].value.item_id;
 
                 }else if(fields[j].type == 'date'){
 
-                    tempObj[external_id]  = fields[j].values[0].start_date
+                    tempObj[external_id]  = (fields[j].values[0].start_date).split('-').join('');
+
 
                 }else if(fields[j].type == 'calculation'){
+
                     tempObj[external_id]  = fields[j].values[0].value;
 
                 }else if(fields[j].type == "number"){
@@ -156,16 +160,14 @@ PODIO_SVC.prototype = {
                     tempObj[external_id]  = fields[j].values[0].value;
 
                 }else if(fields[j].type == 'catagory'){
-                    tempObj[external_id]  = fields[j].values[0].value;
+
+                    tempObj[external_id]  = fields[j].values[0].value.id;
                 }
             }
             itemData.push(tempObj);
             tempObj = {};
-            
         }
-        return itemData;}catch(error){
-            console.log(JSON.stringify(error));
-        }
+        return itemData;
     }
 }
 

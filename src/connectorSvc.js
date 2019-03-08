@@ -19,7 +19,6 @@ ConnectorSvc.prototype = {
         var apiKey      = this.getOauthService().getAccessToken();
         var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
         var appfieldsSchema   = podioSvc.getFieldsName(appId, apiKey);
-        console.log("Schema is : " + JSON.stringify(appfieldsSchema));
         return appfieldsSchema;
     },
     
@@ -106,7 +105,6 @@ ConnectorSvc.prototype = {
         var apiKey      = this.getOauthService().getAccessToken();
         var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
         itemData = podioSvc.getItems(appId, apiKey);
-        console.log("Item Data : " + JSON.stringify(itemData));
         var dataSchema = this.prepareSchema(request)
         return this.buildTabularData(itemData, dataSchema);
     },
@@ -121,7 +119,7 @@ ConnectorSvc.prototype = {
                 }
             }
         });
-
+        console.log("Data schema created os : " + JSON.stringify(dataSchema));
         return dataSchema;
     },
 
@@ -133,7 +131,7 @@ ConnectorSvc.prototype = {
                 values : dataBuilder.build(item)
             })
         });
-        
+        console.log('Value is : ' + JSON.stringify(data))
         return {
             schema: dataSchema,
             rows: data

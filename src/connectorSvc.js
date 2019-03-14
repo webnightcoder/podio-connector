@@ -101,26 +101,35 @@ ConnectorSvc.prototype = {
     },
 
     getData: function (request) {
+        var self = this;
         var appId       = request.configParams.app_id;
         var apiKey      = this.getOauthService().getAccessToken();
         var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
         itemData = podioSvc.getItems(appId, apiKey);
-        var dataSchema = this.prepareSchema(request)
-        return this.buildTabularData(itemData, dataSchema);
-    },
-
-    prepareSchema: function (request) {
-        var dataSchema = [];
-        var fixedSchema = this.getSchema(request).schema;
-        request.fields.forEach(function(field) {
-            for (var i = 0; i < fixedSchema.length; i++) {
-                if (fixedSchema[i].name == field.name) {
-                    dataSchema.push(fixedSchema[i]);
-                }
+        this.prepareSchema(request, function(err, dataSchema){
+            if(err){
+                console.log("Error while creating schema : " + JSON.stringify(err));
+            }else{
+                return self.buildTabularData(itemData, dataSchema);      
             }
         });
-        console.log("Data schema created os : " + JSON.stringify(dataSchema));
-        return dataSchema;
+    },
+
+    prepareSchema: function (request, cb) {
+       try{
+            var dataSchema = [];
+            var fixedSchema = this.getSchema(request).schema;
+            request.fields.forEach(function(field) {
+                for (var i = 0; i < fixedSchema.length; i++) {
+                    if (fixedSchema[i].name == field.name) {
+                        dataSchema.push(fixedSchema[i]);
+                    }
+                }
+            });
+            cb(null, dataSchema);
+        }catch(err){
+            cb(err);
+        }
     },
 
     buildTabularData: function (itemData, dataSchema) {
@@ -132,6 +141,7 @@ ConnectorSvc.prototype = {
             })
         });
         console.log('Value is : ' + JSON.stringify(data))
+        console.log("Schema is :" + JSON.stringify(dataSchema));
         return {
             schema: dataSchema,
             rows: data

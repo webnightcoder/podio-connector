@@ -44,7 +44,7 @@ PODIO_SVC.prototype = {
             label : 'Item Id',
             dataType : "NUMBER",
             semantics: {
-                conceptType: 'METRIC'
+                conceptType: 'DIMENSION'
             }
         })
         for(var i =0; i < fields.length; i++){
@@ -66,8 +66,7 @@ PODIO_SVC.prototype = {
                         label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
-                            'conceptType': 'METRIC',
-                            'semanticGroup': 'DATE_OR_TIME'
+                            'conceptType': 'DIMENSION'
                         }
                     })
                 }
@@ -122,8 +121,7 @@ PODIO_SVC.prototype = {
 
     getItems : function(appId, apiKey){
         var headers = {
-            Authorization : "Bearer " + apiKey,
-                limit : 500
+            Authorization : "Bearer " + apiKey
         }
         var url = 'https://api.podio.com/item/app/'+appId+'/';
         var result = this._UrlFetchApp.fetch(url, {headers : headers});

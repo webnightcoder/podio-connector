@@ -41,7 +41,6 @@ PODIO_SVC.prototype = {
         configSchema.schema = [];
         configSchema.schema.push({
             name  : 'item_id',
-            label : 'Item Id',
             dataType : "NUMBER",
             semantics: {
                 conceptType: 'DIMENSION'
@@ -52,7 +51,6 @@ PODIO_SVC.prototype = {
                 if(fields[i].status == 'active'){
                     configSchema.schema.push({
                         name  : fields[i].external_id,
-                        label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
                             conceptType: 'DIMENSION'
@@ -63,10 +61,9 @@ PODIO_SVC.prototype = {
                 if(fields[i].status == 'active'){
                     configSchema.schema.push({
                         name  : fields[i].external_id,
-                        label : fields[i].external_id,
-                        dataType : "STRING",
+                        dataType : "DATE",
                         semantics: {
-                            'conceptType': 'DIMENSION'
+                            'conceptType': 'METRIC'
                         }
                     })
                 }
@@ -74,7 +71,6 @@ PODIO_SVC.prototype = {
                 if(fields[i].status == "active"){
                     configSchema.schema.push({
                         name  : fields[i].external_id,
-                        label : fields[i].external_id,
                         dataType : "NUMBER",
                         semantics: {
                             conceptType: 'METRIC',
@@ -85,7 +81,6 @@ PODIO_SVC.prototype = {
                 if(fields[i].status == 'active'){
                     configSchema.schema.push({
                         name  : fields[i].external_id,
-                        label : fields[i].external_id,
                         dataType : "NUMBER",
                         semantics: {
                             conceptType: 'METRIC',
@@ -96,7 +91,6 @@ PODIO_SVC.prototype = {
                 if(fields[i].status == 'active'){
                     configSchema.schema.push({
                         name  : fields[i].external_id,
-                        label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
                             conceptType: 'DIMENSION'
@@ -107,7 +101,6 @@ PODIO_SVC.prototype = {
                 if(fields[i].status == 'active'){
                     configSchema.schema.push({
                         name  : fields[i].external_id,
-                        label : fields[i].external_id,
                         dataType : "STRING",
                         semantics: {
                             conceptType: 'DIMENSION'
@@ -145,8 +138,7 @@ PODIO_SVC.prototype = {
                 }else if(fields[j].type == 'date'){
 
                     tempObj[external_id]  = (fields[j].values[0].start_date).split('-').join('');
-
-
+                    console.log("date : " + fields[j].values[0].start_date );
                 }else if(fields[j].type == 'calculation'){
 
                     tempObj[external_id]  = fields[j].values[0].value;
@@ -174,3 +166,58 @@ if (typeof(exports) !== 'undefined') {
     exports['__esModule'] = true;
     exports['default'] = PODIO_SVC;;
 }
+
+
+if (typeof(require) !== 'undefined') {
+    var ConnectorSvc   = require('./connectorSvc.js')['default'];
+  }
+  
+  
+//   function getConnector(){
+//     return new ConnectorSvc({
+//       CacheService: CacheService,
+//       UrlFetchApp: UrlFetchApp,
+//       HtmlService: HtmlService,
+//       PropertiesService: PropertiesService,
+//       OAuth2: OAuth2
+//     });
+//   }
+  
+//   function getConfig(request) {
+//     return getConnector().getConfig();
+//   }
+  
+//   function getSchema(request) {
+//     return getConnector().getSchema(request);
+//   }
+  
+  
+//   function getData(request) {
+//     console.log("GET Data : " + JSON.stringify(request));
+//     return getConnector().getData(request);
+//   }
+  
+//   function getAuthType() {
+//     return getConnector().getAuthType();
+//   }
+  
+//   function isAdminUser() {
+//     return getConnector().isAdminUser();
+//   }
+  
+//   function authCallback(request) {
+//     return getConnector().authCallback(request);
+//   }
+  
+//   function isAuthValid() {
+//     return getConnector().isAuthValid();
+//   }
+  
+//   function resetAuth() {
+//     getConnector().resetAuth();
+//   }
+  
+//   function get3PAuthorizationUrls() {
+//     return getConnector().get3PAuthorizationUrls();
+//   }
+  

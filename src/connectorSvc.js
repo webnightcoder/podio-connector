@@ -140,7 +140,7 @@ ConnectorSvc.prototype = {
                 values : dataBuilder.build(item)
             })
         });
-        console.log('Value is : ' + JSON.stringify(data))
+        console.log('Value is : ' + JSON.stringify(data));
         console.log("Schema is :" + JSON.stringify(dataSchema));
         return {
             schema: dataSchema,

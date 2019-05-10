@@ -1,136 +1,156 @@
-var spotifySchema = [
-    {
-      name: 'text',
-      dataType: 'STRING',
-      semantics: {
-        conceptType: 'DIMENSION'
-      }
+  
+if (typeof (require) !== 'undefined') {
+    var OauthBuilderSvc     = require('./services/OauthBuilderSvc.js')['default'],
+        OauthSvc            = require('./services/OauthSvc.js')['default'],
+        CONF                = require('./conf.js')['default'],
+        DataBuilderSvc      = require('./dataBuilder.js'),
+        PODIO_SVC           = require('./services/podioSvc.js')['default'];
+}
+
+
+function ConnectorSvc(services) {
+    this._services = services;
+}
+ConnectorSvc.prototype = {
+    getSchema: function (request) {
+        return this.getDynamicSchema(request.configParams.app_id);
     },
-    {
-      name: 'popularity',
-      dataType: 'NUMBER',
-      semantics: {
-        conceptType: 'METRIC'
-      }
-    }
-  ];
-  
-  function getAuthType() {
-    var response = {
-      type: 'OAUTH2'
-    };
-    return response;
-  }
-  var getOAuthService = function() {
-    var scriptProps = PropertiesService.getScriptProperties();
-    return OAuth2.createService('Spotify')
-      .setAuthorizationBaseUrl('https://accounts.spotify.com/authorize')
-      .setTokenUrl('https://accounts.spotify.com/api/token')
-      .setClientId(scriptProps.getProperty('OAUTH_CLIENT_ID'))
-      .setClientSecret(scriptProps.getProperty('OAUTH_CLIENT_SECRET'))
-      .setPropertyStore(PropertiesService.getUserProperties())
-      .setCallbackFunction('authCallback');
-  };
-  function authCallback(request) {
-    var authorized = getOAuthService().handleCallback(request);
-    if (authorized) {
-      return HtmlService.createHtmlOutput('Success! You can close this tab.');
-    } else {
-      return HtmlService.createHtmlOutput('Denied. You can close this tab');
-    }
-  }
-  function isAuthValid() {
-    var service = getOAuthService();
-    if (service == null) {
-      return false;
-    }
-    return service.hasAccess();
-  }
-  function get3PAuthorizationUrls() {
-    var service = getOAuthService();
-    if (service == null) {
-      return '';
-    }
-    return service.getAuthorizationUrl();
-  }
-  function resetAuth() {
-    var service = getOAuthService();
-    service.reset();
-  }
-  function getConfig(request) {
-    var config = {
-      configParams: [
-        {
-          type: 'INFO',
-          name: 'Spotify search',
-          text: 'Enter the artist for all their Spotify rated popularity tracks'
-        },
-        {
-          type: 'TEXTINPUT',
-          name: 'artistName',
-          displayName: 'Search',
-          helpText: 'e.g. Coldplay',
-          placeholder: 'Search for an artist for all songs'
+
+    getDynamicSchema : function(appId){
+        var apiKey      = this.getOauthService().getAccessToken();
+        var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
+        var appfieldsSchema   = podioSvc.getFieldsName(appId, apiKey);
+        return appfieldsSchema;
+    },
+    
+
+    getConfig: function () {
+        // var apiKey = this.getOauthService().getAccessToken();
+        // var podioSvc = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
+        // var orgData = podioSvc.getOrgnizations();
+
+        var cc = DataStudioApp.createCommunityConnector();
+        var config = cc.getConfig();
+        
+        config
+            .newTextInput()
+            .setId('org_id')
+            .setName('org_id')
+            .setHelpText('Enter the Id of Orgnization')
+            .setAllowOverride(true)
+            .setPlaceholder('Enter the Id of Orgnization')
+
+        config
+            .newTextInput()
+            .setId('space_id')
+            .setName('space_id')
+            .setHelpText('Enter the id of space')
+            .setAllowOverride(true)
+            .setPlaceholder('Enter the id of space')
+        
+        config
+            .newTextInput()
+            .setId('app_id')
+            .setName('app_id')
+            .setHelpText('Enter the id of app')
+            .setAllowOverride(true)
+            .setPlaceholder('Enter the id of app')
+            
+        // var temp = config.newSelectSingle()
+        // .setId('Org_name')
+        // .setAllowOverride(false)
+
+        // for(var i =0; i < orgData.length ; i++){
+        //     temp.addOption(config.newOptionBuilder()
+        //     .setLabel(orgData[i].org_name)
+        //     .setValue(orgData[i].org_id))
+        // } //  append the dynamic name from org details
+        
+        config.setDateRangeRequired(false);
+        return config.build();
+    },
+
+    getAuthType: function () {
+        return {
+            type: "OAUTH2"
         }
-      ]
-    };
-    return config;
-  }
-  function getSchema(request) {
-    var reqSchema = {
-      schema: spotifySchema
-    };
-    return reqSchema;
-  }
-  function getData(request) {
-    // Create schema for requested fields
-    var requestedSchema = request.fields.map(function(field) {
-      for (var i = 0; i < spotifySchema.length; i++) {
-        if (spotifySchema[i].name == field.name) {
-          return spotifySchema[i];
+    },
+
+    isAdminUser: function () {
+        return true;
+    },
+
+    authCallback: function (request) {
+        return this.getOauthService().authCallback(request);
+    },
+
+    isAuthValid: function (request) {
+        return this.getOauthService().isAuthValid()
+    },
+
+    get3PAuthorizationUrls: function () {
+        return this.getOauthService().get3PAuthorizationUrls();
+    },
+
+    resetAuth: function () {
+        this.getOauthService().resetAuth();
+    },
+
+    getOauthService: function () {
+        var builder = new OauthBuilderSvc(this._services.PropertiesService, this._services.OAuth2, CONF);
+        return new OauthSvc(builder, this._services.HtmlService, CONF);
+    },
+
+    getData: function (request) {
+        var self = this;
+        var appId       = request.configParams.app_id;
+        var apiKey      = this.getOauthService().getAccessToken();
+        var podioSvc    = new PODIO_SVC(this._services.CacheService, this._services.UrlFetchApp, apiKey);
+        itemData = podioSvc.getItems(appId, apiKey);
+        this.prepareSchema(request, function(err, dataSchema){
+            if(err){
+                console.log("Error while creating schema : " + JSON.stringify(err));
+            }else{
+                return self.buildTabularData(itemData, dataSchema);      
+            }
+        });
+    },
+
+    prepareSchema: function (request, cb) {
+       try{
+            var dataSchema = [];
+            var fixedSchema = this.getSchema(request).schema;
+            request.fields.forEach(function(field) {
+                for (var i = 0; i < fixedSchema.length; i++) {
+                    if (fixedSchema[i].name == field.name) {
+                        dataSchema.push(fixedSchema[i]);
+                    }
+                }
+            });
+            cb(null, dataSchema);
+        }catch(err){
+            cb(err);
         }
-      }
-    });
-  
-    // Fetch and parse data from API
-    var url = [
-      'https://api.spotify.com/v1/search?q=',
-      request.configParams.artistName,
-      '&type=track'
-    ];
-  
-    var options = {
-      headers: {
-        Authorization: 'Bearer ' + getOAuthService().getAccessToken()
-      }
-    };
-    var response = UrlFetchApp.fetch(url.join(''), options);
-    var parsedResponse = JSON.parse(response).tracks.items;
-    console.log(parsedResponse);
-  
-    // Transform parsed data and filter for requested fields
-    var requestedData = parsedResponse.map(function(trackSearch) {
-      var values = [];
-      requestedSchema.forEach(function(field) {
-        switch (field.name) {
-          case 'text':
-            values.push(trackSearch.name);
-            break;
-          case 'popularity':
-            values.push(trackSearch.popularity);
-            break;
-          default:
-            values.push('');
-            break;
+    },
+
+    buildTabularData: function (itemData, dataSchema) {
+        var dataBuilder = new DataBuilderSvc(dataSchema);
+        var data        = [];
+        itemData.forEach(function(item){
+            data.push({
+                values : dataBuilder.build(item)
+            })
+        });
+        console.log('Value is : ' + JSON.stringify(data));
+        console.log("Schema is :" + JSON.stringify(dataSchema));
+        return {
+            schema: dataSchema,
+            rows: data
         }
-      });
-      return {
-        values: values
-      };
-    });
-  
-    return {
-      schema: requestedSchema,
-      rows: requestedData
-    };
-  }
+    }
+}
+
+if (typeof (exports) !== 'undefined') {
+    exports['__esModule'] = true;
+    exports['default'] = ConnectorSvc;;
+}

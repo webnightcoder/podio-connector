@@ -1,5 +1,5 @@
 {
-  "timeZone": "Asia/Kolkata",
+  "timeZone": "America/New_York",
   "dependencies": {
     "libraries": [{
       "userSymbol": "OAuth2",
@@ -7,7 +7,6 @@
       "version": "26"
     }]
   },
-  "exceptionLogging": "STACKDRIVER",
   "dataStudio":{
     "name": "Podio Connector",
     "company": "Lucenta solutions",
@@ -15,5 +14,6 @@
     "addonUrl": "https://github.com/webnightcoder/podio-connector",
     "supportUrl": "https://github.com/webnightcoder/podio-connector",
     "description": "Fetch Data from Podio and Create Graph"
-  }
+  },
+  "exceptionLogging": "STACKDRIVER"
 }
